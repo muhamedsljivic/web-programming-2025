@@ -1,0 +1,158 @@
+<div style="margin: 200px;">
+    <!-- Buttons for Add, Update, Delete -->
+    <table id="myTable3" class="display">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Muhamed</td>
+                <td>Sljivic</td>
+                <td><button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td>Doe</td>
+                <td><button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+            <tr>
+                <td>Muhamed</td>
+                <td>Sljivic</td>
+                <td><button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td>Doe</td>
+                <td><button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+            <tr>
+                <td>Muhamed</td>
+                <td>Sljivic</td>
+                <td><button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td>Doe</td>
+                <td><button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+            <tr>
+                <td>Muhamed</td>
+                <td>Sljivic</td>
+                <td><button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td>Doe</td>
+                <td><button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+            <tr>
+                <td>Muhamed</td>
+                <td>Sljivic</td>
+                <td><button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td>Doe</td>
+                <td><button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+            <tr>
+                <td>Muhamed</td>
+                <td>Sljivic</td>
+                <td><button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td>Doe</td>
+                <td><button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button id="addUserButton" onclick="openModal()">Add User</button>
+
+    <div id="myModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
+        <div style="background-color:white; padding:20px; border-radius:10px; width:300px;">
+            <h3>Add New User</h3>
+            <form id="userForm">
+                <label for="column1">Column 1:</label><br>
+                <input type="text" id="column1" name="column1"><br><br>
+                <label for="column2">Column 2:</label><br>
+                <input type="text" id="column2" name="column2"><br><br>
+                <button type="button" onclick="saveUser()">Save</button>
+                <button type="button" onclick="closeModal()">Close</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+     function openModal() {
+        document.getElementById('myModal').style.display = 'flex';
+    }
+    
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+    }
+    
+    function saveUser() {
+        let column1 = document.getElementById('column1').value;
+        let column2 = document.getElementById('column2').value;
+    
+        let table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+        let newRow = table.insertRow(table.rows.length);
+        
+        let cell1 = newRow.insertCell(0);
+        let cell2 = newRow.insertCell(1);
+        let cell3 = newRow.insertCell(2); // For Update/Delete buttons
+        
+        cell1.innerHTML = column1;
+        cell2.innerHTML = column2;
+        cell3.innerHTML = `<button onclick="updateRow(this)">Update</button> <button onclick="deleteRow(this)">Delete</button>`;
+        
+        document.getElementById('userForm').reset();
+        closeModal();
+    }
+    
+    function updateRow(button) {
+        let row = button.parentNode.parentNode;
+        let column1 = row.cells[0].innerHTML;
+        let column2 = row.cells[1].innerHTML;
+        
+        document.getElementById('column1').value = column1;
+        document.getElementById('column2').value = column2;
+        
+        let saveButton = document.querySelector('#myModal button[type="button"]');
+        saveButton.setAttribute('onclick', 'saveUpdatedRow(' + row.rowIndex + ')');
+        saveButton.innerHTML = 'Update';
+        
+        // Show the modal
+        openModal();
+    }
+    
+    function saveUpdatedRow(rowIndex) {
+        let column1 = document.getElementById('column1').value;
+        let column2 = document.getElementById('column2').value;
+        
+        let table = document.getElementById('myTable');
+        let row = table.rows[rowIndex];
+        
+        row.cells[0].innerHTML = column1;
+        row.cells[1].innerHTML = column2;
+        
+        document.getElementById('userForm').reset();
+        closeModal();
+        
+        let saveButton = document.querySelector('#myModal button[type="button"]');
+        saveButton.setAttribute('onclick', 'saveUser()');
+        saveButton.innerHTML = 'Save';
+    }
+    
+    function deleteRow(button) {
+        let row = button.parentNode.parentNode;
+        row.remove();
+    }
+</script>
