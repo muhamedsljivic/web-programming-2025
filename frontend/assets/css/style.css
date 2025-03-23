@@ -316,7 +316,12 @@ button {
     color: #212529;
 }
 
-/* Align hamburger button to the right */
-.navbar-toggler {
-    margin-left: auto; /* Align to the right */
+
+#pageContent {
+    padding-bottom: 80px; /* Add space for footer */
 }
+
+body {
+    padding-bottom: 80px; /* Ensure content doesn't overlap footer */
+}
+
