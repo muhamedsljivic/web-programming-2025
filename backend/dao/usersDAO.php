@@ -25,7 +25,7 @@ class UsersDao extends BaseDao {
     }
 
     // Update user
-    public function updateUser($id, $data) {
+    public function updateUser($id, $data): mixed {
         return $this->update($id, $data);
     }
 
