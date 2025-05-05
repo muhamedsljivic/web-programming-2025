@@ -1,17 +1,18 @@
 <?php
-require_once './config.php';
+require_once __DIR__ . '/config.php';
+
 
 
 class BaseDao {
-   protected $table;
-   protected $connection;
+    protected $table;
+    protected $connection;
 
 
-   public function __construct($table) {
-       $this->table = $table;
-       $this->connection = Database::connect();
-   }
-   public function getAll() {
+    public function __construct($table) {
+        $this->table = $table;
+        $this->connection = Database::connect();
+    }
+    public function getAll() {
     $stmt = $this->connection->prepare("SELECT * FROM " . $this->table);
     $stmt->execute();
     return $stmt->fetchAll();
@@ -27,6 +28,7 @@ public function getById($id) {
 
 
 public function insert($data) {
+    var_dump($data); // Debugging
     $columns = implode(", ", array_keys($data));
     $placeholders = ":" . implode(", :", array_keys($data));
     $sql = "INSERT INTO " . $this->table . " ($columns) VALUES ($placeholders)";

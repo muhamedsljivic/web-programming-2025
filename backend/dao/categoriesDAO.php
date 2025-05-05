@@ -1,5 +1,5 @@
 <?php
-require_once './BaseDao.php';
+require_once __DIR__ . '/BaseDao.php';
 
 class CategoriesDao extends BaseDao {
     public function __construct() {
@@ -29,6 +29,15 @@ class CategoriesDao extends BaseDao {
     // Delete category
     public function deleteCategory($id) {
         return $this->delete($id);
+    }
+
+    // Get category by name (new method)
+    public function getCategoryByName($name) {
+            $sql = "SELECT * FROM " . $this->table . " WHERE name = :name LIMIT 1";
+            $stmt = $this->connection->prepare($sql);  // Use $this->connection instead of $this->db
+            $stmt->bindParam(':name', $name);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC); // Return a single category or null if not found
     }
 }
 ?>

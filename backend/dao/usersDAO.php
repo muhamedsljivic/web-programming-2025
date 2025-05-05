@@ -1,5 +1,5 @@
 <?php
-require_once './BaseDao.php';
+require_once __DIR__ . '/BaseDao.php';
 
 class UsersDao extends BaseDao {
     public function __construct() {
@@ -23,10 +23,29 @@ class UsersDao extends BaseDao {
     public function createUser($data) {
         return $this->insert($data);
     }
-
-    // Update user
-    public function updateUser($id, $data): mixed {
-        return $this->update($id, $data);
+    public function updateUser($id, $data) {
+        $sql = "UPDATE users SET name = :name, email = :email, password = :password, phone = :phone, address = :address, city = :city, country = :country, postal_code = :postal_code, role = :role WHERE id = :id";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':name', $data['name']);
+        $stmt->bindParam(':email', $data['email']);
+        $stmt->bindParam(':password', $data['password']);
+        $stmt->bindParam(':phone', $data['phone']);
+        $stmt->bindParam(':address', $data['address']);
+        $stmt->bindParam(':city', $data['city']);
+        $stmt->bindParam(':country', $data['country']);
+        $stmt->bindParam(':postal_code', $data['postal_code']);
+        $stmt->bindParam(':role', $data['role']);
+        return $stmt->execute();
+    }
+    
+    
+    public function getById($id) {
+        $query = "SELECT * FROM users WHERE id = :id";
+        $stmt = $this->connection->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     // Delete user
