@@ -1,5 +1,5 @@
 <?php
-require_once './BaseDao.php';
+require_once __DIR__ . '/BaseDao.php';
 
 class CartDao extends BaseDao {
     public function __construct() {
@@ -21,6 +21,17 @@ class CartDao extends BaseDao {
 
     // Add a product to the cart or update quantity if already exists
     public function addToCart($user_id, $product_id, $quantity = 1) {
+        // Check if the product exists in the products table
+        $stmt = $this->connection->prepare("SELECT * FROM products WHERE id = :product_id");
+        $stmt->bindParam(':product_id', $product_id);
+        $stmt->execute();
+        $product = $stmt->fetch();
+    
+        if (!$product) {
+            // Product doesn't exist
+            throw new Exception("Product with ID $product_id not found.");
+        }
+    
         if ($this->isProductInCart($user_id, $product_id)) {
             return $this->updateCartQuantity($user_id, $product_id, $quantity);
         } else {
@@ -32,6 +43,8 @@ class CartDao extends BaseDao {
             return $this->insert($data);
         }
     }
+    
+    
 
     // Check if a product is already in the cart
     public function isProductInCart($user_id, $product_id) {

@@ -1,5 +1,5 @@
 <?php
-require_once './BaseDao.php';
+require_once __DIR__ . '/BaseDao.php';
 
 class OrdersDao extends BaseDao {
     public function __construct() {
@@ -34,14 +34,13 @@ class OrdersDao extends BaseDao {
         return $this->insert($data);
     }
 
-    // Update order status
     public function updateOrderStatus($order_id, $status) {
         $data = [
             'status' => $status
         ];
-        return $this->update($order_id, $data);
+        return $this->update($order_id, $data);  // Ensure this is calling the correct update method
     }
-
+    
     // Delete an order
     public function deleteOrder($order_id) {
         return $this->delete($order_id);
