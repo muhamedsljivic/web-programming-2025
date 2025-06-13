@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => 'dev-milestone-2',
-        'version' => 'dev-milestone-2',
-        'reference' => 'a5f9831f5ab0c20fbea2d78cd51617c9ccc3e5e9',
+        'pretty_version' => 'dev-milestone-3',
+        'version' => 'dev-milestone-3',
+        'reference' => 'd90e76e1ef013017d09186b9e5d6b06dfe9476ba',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'dev-milestone-2',
-            'version' => 'dev-milestone-2',
-            'reference' => 'a5f9831f5ab0c20fbea2d78cd51617c9ccc3e5e9',
+            'pretty_version' => 'dev-milestone-3',
+            'version' => 'dev-milestone-3',
+            'reference' => 'd90e76e1ef013017d09186b9e5d6b06dfe9476ba',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -43,6 +43,15 @@
             'reference' => '861c870e8b75f7c8f69c146c7f89cc1c0f1b49b6',
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/lexer',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'firebase/php-jwt' => array(
+            'pretty_version' => 'v6.11.1',
+            'version' => '6.11.1.0',
+            'reference' => 'd1e91ecf8c598d073d0995afa8cd5c75c6e19e66',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../firebase/php-jwt',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

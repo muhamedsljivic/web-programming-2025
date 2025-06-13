@@ -5,6 +5,8 @@ error_reporting(E_ALL);
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/dao/config.php';
+require_once __DIR__ . '/services/authMiddleware.php';
+
 
 // Enable CORS
 Flight::before('start', function() {
@@ -42,6 +44,7 @@ require_once 'routes/cartRoutes.php';
 require_once 'routes/wishlistRoutes.php';
 require_once 'routes/orderRoutes.php';
 
+
 Flight::route('GET /connection-test', function(){
     try {
         $db = Database::connect();
@@ -60,6 +63,11 @@ Flight::route('GET /connection-test', function(){
     }
 });
 
+Flight::map('authMiddleware', function () {
+    return new AuthMiddleware();
+});
+
+
 // OpenAPI docs
 Flight::route('GET /docs', function() {
     header('Content-Type: application/yaml');
@@ -68,6 +76,14 @@ Flight::route('GET /docs', function() {
 
 // Base URL configuration for MAMP
 Flight::set('flight.base_url', '/hexashop/backend/');
+
+Flight::route('OPTIONS *', function() {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    Flight::halt(200, '');
+});
+
 
 Flight::start();
 ?>

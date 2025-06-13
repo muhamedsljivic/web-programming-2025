@@ -14,6 +14,24 @@ class UsersService extends BaseService {
     public function get_user_by_email($email) {
         return $this->dao->getByEmail($email);
     }
+
+    public function add_user($data) {
+    $data['created_at'] = date('Y-m-d H:i:s'); // add timestamp if needed
+
+    return $this->dao->createUser([
+        'name' => $data['username'],  // maps username to 'name'
+        'email' => $data['email'],
+        'password' => $data['password'],
+        'phone' => $data['phone'] ?? null,
+        'address' => $data['address'] ?? null,
+        'city' => $data['city'] ?? null,
+        'country' => $data['country'] ?? null,
+        'postal_code' => $data['postal_code'] ?? null,
+        'role' => $data['role'],
+        'created_at' => $data['created_at'] ?? date('Y-m-d H:i:s'),
+    ]);
+}
+
     public function create_user($name, $email, $password, $phone, $address, $city, $country, $postal_code, $role, $created_at) {
         // Prepare the data array
         $data = [

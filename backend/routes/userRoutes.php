@@ -11,9 +11,10 @@
  * )
  */
 Flight::route('GET /users', function() {
-    // Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
+    AuthMiddleware::authorizeRole('admin');
     Flight::json(Flight::usersService()->get_all_users());
 });
+
 /**
  * @OA\Get(
  *     path="/users/{email}",
@@ -132,4 +133,103 @@ Flight::route('PUT /users/@id', function($id) {
 Flight::route('DELETE /users/@id', function($id) {
     Flight::json(Flight::usersService()->delete_user($id));
 });
+
+/**
+ * @OA\Post(
+ *     path="/register",
+ *     tags={"auth"},
+ *     summary="Register a new user",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"email", "username", "password"},
+ *             @OA\Property(property="username", type="string", example="JohnDoe"),
+ *             @OA\Property(property="email", type="string", example="john@example.com"),
+ *             @OA\Property(property="password", type="string", example="SecurePass123")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="User registered successfully"
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Missing required fields"
+ *     ),
+ *     @OA\Response(
+ *         response=409,
+ *         description="User already exists"
+ *     )
+ * )
+ */
+
+// Register a new user
+Flight::route('POST /register', function() {
+    $data = Flight::request()->data->getData();
+
+    if (!isset($data['email'], $data['password'], $data['username'])) {
+        Flight::halt(400, 'Missing required fields');
+    }
+
+    $existing = Flight::usersService()->get_user_by_email($data['email']);
+    if ($existing) {
+        Flight::halt(409, 'User already exists');
+    }
+
+    $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+    $data['role'] = 'user'; // default role
+
+    Flight::usersService()->add_user($data);
+    Flight::json(['message' => 'User registered successfully']);
+});
+
+/**
+ * @OA\Post(
+ *     path="/login",
+ *     tags={"auth"},
+ *     summary="Login a user",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"email", "password"},
+ *             @OA\Property(property="email", type="string", example="john@example.com"),
+ *             @OA\Property(property="password", type="string", example="SecurePass123")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Login successful"
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Invalid credentials"
+ *     )
+ * )
+ */
+
+// Login
+Flight::route('POST /login', function() {
+    $data = Flight::request()->data->getData();
+
+    if (!isset($data['email'], $data['password'])) {
+        Flight::halt(400, 'Missing email or password');
+    }
+
+    $user = Flight::usersService()->get_user_by_email($data['email']);
+
+    if (!$user || !password_verify($data['password'], $user['password'])) {
+        Flight::halt(401, 'Invalid credentials');
+    }
+
+    // Save user session
+    session_start();
+    $_SESSION['user'] = [
+        'id' => $user['id'],
+        'email' => $user['email'],
+        'role' => $user['role']
+    ];
+
+    Flight::json(['message' => 'Login successful']);
+});
+
 ?>

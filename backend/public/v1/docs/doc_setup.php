@@ -14,7 +14,7 @@
 
 /**
  * @OA\Server(
- *      url="http://localhost/hexashop/backend",
+ *      url="http://localhost:8080/hexashop/backend",
  *      description="API server"
  * )
 */

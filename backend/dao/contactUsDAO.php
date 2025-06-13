@@ -11,8 +11,7 @@ class ContactUsDao extends BaseDao {
         return $this->getAll();
     }
 
-        // Add this method to your DAO class
-      
+   
     // Get a single contact message by ID
     public function getMessageById($id) {
         return $this->getById($id);

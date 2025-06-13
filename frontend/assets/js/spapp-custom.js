@@ -9,7 +9,34 @@ var app = $.spapp({pageNotFound : 'not_found',
 // define routes
 app.route({
   view: 'sign_up',
+  onReady: function () {
+    const registerForm = document.getElementById("register-form");
+    if (registerForm) {
+     registerForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      console.log("test")
+        const formData = new FormData(registerForm);
+        const data = Object.fromEntries(formData.entries());
+
+        const response = await fetch("http://localhost/hexashop/backend/public/v1/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+          credentials: "include"
+        });
+
+        const result = await response.json();
+        if (!response.ok) {
+          alert("Registration failed: " + (result.message || "Unknown error"));
+          return;
+        }
+
+        alert(result.message || "Registration successful!"); 
+      });
+    }
+  }
 });
+
 
 app.route({
     view: 'log_in',
